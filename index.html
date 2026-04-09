@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCA Student Manager</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Excel Library -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- LOGIN SECTION - clean, mobile friendly -->
+        <div id="loginSection" class="login-panel">
+            <h2>🔐 BCA Portal</h2>
+            <p>Secure Student Management</p>
+            <div class="input-group">
+                <label>User ID</label>
+                <input type="text" id="loginUserId" placeholder="Enter user ID" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Password">
+            </div>
+            <button class="btn-login" id="loginBtn">Login to Dashboard</button>
+            <div id="loginErrorMsg" class="login-error">Wrong Username or Password.</div>
+        </div>
+
+        <!-- DASHBOARD (protected) -->
+        <div id="dashboardSection" class="dashboard">
+            <div class="dashboard-header">
+                <div>
+                    <h1>📚 BCA Student Manager <span class="badge-dept">BCA only</span></h1>
+                    <p style="color:#2c6979; font-size:0.75rem; margin-top:5px;">Dynamic fields | Export to Excel</p>
+                </div>
+                <button class="btn-logout" id="logoutBtn">🚪 Logout</button>
+            </div>
+
+            <!-- Add/Edit Student Form -->
+            <div class="card">
+                <h3 style="margin-bottom: 1rem; color: #0f4c5c; font-size: 1.2rem;">📝 Student Information</h3>
+                <div class="form-row" id="standardFieldsRow">
+                    <div class="form-field"><label>🎓 Roll Number *</label><input type="text" id="rollNo"
+                            placeholder="BCA2101"></div>
+                    <div class="form-field"><label>👤 Full Name *</label><input type="text" id="fullName"
+                            placeholder="Student name"></div>
+                    <div class="form-field"><label>📖 Semester (1-8)</label><input type="number" id="semester" min="1"
+                            max="8" step="1" value="1"></div>
+                    <div class="form-field"><label>🏛️ Department</label><input type="text" id="department" value="BCA"
+                            readonly disabled class="fixed-dept"></div>
+                    <div class="form-field"><label>⚧️ Gender</label><select id="gender">
+
+                            <option value="">Select Gender</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-field"><label>🎂 Date of Birth</label><input type="date" id="dob"></div>
+                    <div class="action-btns"><button class="btn-primary" id="addUpdateBtn">➕ Add Student</button>
+                        <button class="btn-secondary" id="cancelEditBtn" style="display: none;">✖️ Cancel</button>
+                    </div>
+                </div>
+                <!-- dynamic custom fields container -->
+                <div id="dynamicFieldsContainer" class="form-row" style="margin-top: 12px; flex-wrap: wrap;"></div>
+                <div id="formFeedback" style="margin-top: 8px; font-size: 0.75rem;"></div>
+            </div>
+
+            <!-- Custom Fields Manager -->
+            <div class="card">
+                <h3 style="margin-bottom: 12px; font-size: 1.1rem;">⚙️ Dynamic Field Manager</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;">
+                    <div class="form-field" style="flex:1;"><label>New field name</label>
+                        <input type="text" id="newFieldName" placeholder="e.g., Email, Phone">
+                    </div>
+                    <button class="btn-primary" id="addFieldBtn" style="margin-bottom: 2px;">➕ Add Field</button>
+                </div>
+                <div id="customFieldsList" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+                <div class="custom-fields-area">💡 Add custom fields — they appear in forms, table & Excel export.</div>
+            </div>
+
+            <!-- Search, Export & Stats -->
+            <div class="search-section">
+                <div class="search-box"><input type="text" id="searchInput"
+                        placeholder="🔍 Search by Roll or Name"><button class="btn-secondary"
+                        id="clearSearchBtn">Clear</button></div>
+                <div><button class="btn-primary btn-excel" id="exportExcelBtn">📎 Export to Excel</button></div>
+                <div class="student-count" id="studentCountDisplay">📊 Total: 0</div>
+                <div id="globalMessage" class="message-area"></div>
+            </div>
+
+            <!-- Students Table (dynamic columns) -->
+            <div class="table-wrapper">
+                <table id="studentTable">
+                    <thead id="tableHeader">
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Name</th>
+                            <th>Semester</th>
+                            <th>Department</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="5">Loading...</td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script type="module" src="script.js"></script>
+
+</body>
+
+</html>
